@@ -68,14 +68,14 @@ public class PlantChunk {
 	
 	///-------------------------
 	
-	public void remove(Coords coords) {
+	public synchronized void remove(Coords coords) {
 		if (!loaded)
 			return;
 		
 		plants.remove(coords);
 	}
 	
-	public void add(Coords coords, Plant plant) {
+	public synchronized void add(Coords coords, Plant plant) {
 		if (!loaded) {
 			if (!inDatabase)
 				plants = new HashMap<Coords, Plant>();
@@ -95,7 +95,7 @@ public class PlantChunk {
 		return plants.get(coords);
 	}
 
-	public boolean load(Coords coords) {
+	public synchronized boolean load(Coords coords) {
 		// if the data is being loaded, it is known that this chunk is in the database
 		inDatabase = true;
 		
@@ -149,7 +149,7 @@ public class PlantChunk {
 		return true;
 	}
 	
-	public void unload(Coords chunkCoords) {
+	public synchronized void unload(Coords chunkCoords) {
 		if (!loaded)
 			return;
 		
