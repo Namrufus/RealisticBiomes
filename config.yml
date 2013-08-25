@@ -216,6 +216,7 @@ realistic_biomes:
    inherit: tree
    biomes:
     cold_forest: 2.0
+    cold: 1.5
     mountain: 0.75
 
   TREE:
@@ -316,6 +317,16 @@ realistic_biomes:
    biomes:
     mushroom: 1.0
    
+   HORSE: 
+    inherit: animal
+    base_rate: 0.33
+    not_full_sunlight_multiplier: 0.125
+    biomes:
+     temperate: 1.0
+     cold: 0.50
+     mountain: 0.125
+     hot_dry: 0.125
+     
   #---------------------------------------
 
   mat_EGG:
