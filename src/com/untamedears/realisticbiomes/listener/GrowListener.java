@@ -136,7 +136,7 @@ public class GrowListener implements Listener {
 	private boolean willGrow(Object m, Block b) {
 		if(growthMap.containsKey(m)) {
 			if (isUnderGreenhouse(b)){
-				return Math.random() < 0.25; // If it's in a greenhouse, hamper to 25% under any conditions.
+				return Math.random() < 0.08; // If it's in a greenhouse, hamper to 8% under any conditions.
 			} else {
 				boolean willGrow = Math.random() < growthMap.get(m).getRate(b);
 				return willGrow;
