@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.untamedears.realisticbiomes.async.ChatBufferThread;
 import com.untamedears.realisticbiomes.listener.GrowListener;
 import com.untamedears.realisticbiomes.listener.PlayerListener;
 import com.untamedears.realisticbiomes.listener.SpawnListener;
@@ -27,13 +28,16 @@ import com.untamedears.realisticbiomes.persist.WorldID;
 public class RealisticBiomes extends JavaPlugin implements Listener {
 
 	private static final Logger LOG = Logger.getLogger("RealisticBiomes");
+	public static boolean isEnabled = false;
 	
 	public HashMap<Object, GrowthConfig> materialGrowth;
 	public BlockGrower blockGrower;
 	public PersistConfig persistConfig;
+	public ChatBufferThread chatBuffer;
 	private PlantManager plantManager;
 	
 	public void onEnable() {		
+		isEnabled=true;
 		
 		WorldID.init(this);
 		
@@ -50,6 +54,9 @@ public class RealisticBiomes extends JavaPlugin implements Listener {
 		loadGrowthConfigs(config);
 		
 		registerEvents();
+		
+		chatBuffer = new ChatBufferThread();
+		new Thread(chatBuffer).start();
 		
 		if (persistConfig.enabled) {
 			plantManager = new PlantManager(this, persistConfig);
@@ -206,6 +213,7 @@ public class RealisticBiomes extends JavaPlugin implements Listener {
 	}
 	
 	public void onDisable() {
+		isEnabled=false;
 		if (persistConfig.enabled) {
 			LOG.info("[RealisticBiomes] saving plant growth data.");
 			plantManager.saveAllAndStop();

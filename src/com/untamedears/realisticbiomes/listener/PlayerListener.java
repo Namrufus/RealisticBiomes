@@ -19,6 +19,7 @@ import org.bukkit.material.Tree;
 
 import com.untamedears.realisticbiomes.GrowthConfig;
 import com.untamedears.realisticbiomes.RealisticBiomes;
+import com.untamedears.realisticbiomes.async.ChatBufferThread;
 
 public class PlayerListener implements Listener {
 	
@@ -151,12 +152,12 @@ public class PlayerListener implements Listener {
 					
 					if (plantGrowth == 1.0) {
 						String amount = new DecimalFormat("#0.00").format(growthAmount);
-						event.getPlayer().sendMessage("§7[Realistic Biomes] \""+material.toString()+"\": "+amount+" hours to maturity");
+						ChatBufferThread.sendMsg(event.getPlayer(), "§7[Realistic Biomes] \""+material.toString()+"\": "+amount+" hours to maturity");
 					}
 					else {
 						String amount = new DecimalFormat("#0.00").format(growthAmount);
 						String pAmount = new DecimalFormat("#0.00").format(growthAmount*(1.0-plantGrowth));
-						event.getPlayer().sendMessage("§7[Realistic Biomes] \""+material.toString()+"\": "+pAmount+" of "+amount+" hours to maturity");
+						ChatBufferThread.sendMsg(event.getPlayer(), "§7[Realistic Biomes] \""+material.toString()+"\": "+pAmount+" of "+amount+" hours to maturity");
 					}
 					
 					return;
@@ -171,7 +172,7 @@ public class PlayerListener implements Listener {
 						growthAmount = 0.0;
 					String amount = new DecimalFormat("#0.00").format(growthAmount*100.0)+"%";
 					// send the message out to the user!
-					event.getPlayer().sendMessage("§7[Realistic Biomes] Growth rate \""+material.toString()+"\" = "+amount);
+					ChatBufferThread.sendMsg(event.getPlayer(), "§7[Realistic Biomes] Growth rate \""+material.toString()+"\" = "+amount);
 				}
 			}
 		}
@@ -195,7 +196,7 @@ public class PlayerListener implements Listener {
 				growthAmount = 0.0;
 			String amount = new DecimalFormat("#0.00").format(growthAmount*100.0)+"%";
 			// send the message out to the user!
-			event.getPlayer().sendMessage("§7[Realistic Biomes] Spawn rate \""+entity.getType().toString()+"\" = "+amount);
+			ChatBufferThread.sendMsg(event.getPlayer(), "§7[Realistic Biomes] Spawn rate \""+entity.getType().toString()+"\" = "+amount);
 		}
 	}
 }

@@ -1,9 +1,12 @@
 package com.untamedears.realisticbiomes.listener;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
 import org.bukkit.block.Block;
@@ -132,10 +135,47 @@ public class GrowListener implements Listener {
 	 */
 	private boolean willGrow(Object m, Block b) {
 		if(growthMap.containsKey(m)) {
-			boolean willGrow = Math.random() < growthMap.get(m).getRate(b);
-			return willGrow;
+			if (isUnderGreenhouse(b)){
+				return Math.random() < 0.08; // If it's in a greenhouse, hamper to 8% under any conditions.
+			} else {
+				boolean willGrow = Math.random() < growthMap.get(m).getRate(b);
+				return willGrow;
+			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Determines if a plant of any {@link Material} is under greenhouse conditions.
+	 * @param b The block the crop is growing on.
+	 * @return Whether the crop is in greenhouse conditions or not.
+	 */
+	private boolean isUnderGreenhouse(Block b){
+		boolean is = false;
+		Location loc = b.getLocation();
+		loc.add(0,3,0);
+		b=loc.getBlock();
+		/*
+		 * Check if the crop is two blocks below a valid light. In this case GLOWSTONE or REDSTONE_LAMP_ON.
+		 * If not, check its adjacents.
+		 */
+		if (b.getType().equals(Material.GLOWSTONE) || b.getType().equals(Material.REDSTONE_LAMP_ON)){
+			is=true; // Returned if directly under a light.
+		} else {
+			List<Location> adjacents = Arrays.asList(
+					b.getLocation().add(0,0,1),
+					b.getLocation().add(0,0,-1),
+					b.getLocation().add(1,0,0),
+					b.getLocation().add(-1,0,0));
+			for (Location l : adjacents){
+				Block bl = l.getBlock();
+				if (bl.getType().equals(Material.GLOWSTONE) || bl.getType().equals(Material.REDSTONE_LAMP_ON)){
+					is=true; // Returned if next to a crop directly under a light.
+				}
+			}
+		}
+		
+		return is;
 	}
 	
 	@EventHandler
